@@ -34,14 +34,21 @@ void one() {
 }
 
 int main() {
+  printf("start1\n");
   SDL_Init(SDL_INIT_VIDEO);
+  printf("start2\n");
   SDL_SetVideoMode(600, 450, 32, SDL_HWSURFACE);
+  printf("start3\n");
   SDL_StartTextInput();
+  printf("start4\n");
 
   emscripten_run_script("simulateKeyEvent('a'.charCodeAt(0))"); // a
+  printf("start5\n");
   emscripten_run_script("simulateKeyEvent('A'.charCodeAt(0))"); // A
+  printf("start6\n");
 
   one();
+  printf("start7\n");
 
   return 0;
 }

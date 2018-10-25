@@ -893,6 +893,8 @@ def server_func(dir, q, port):
         self.send_header('Expires', '-1')
         self.end_headers()
         self.wfile.write(b'OK')
+      elif 'stdout=' in self.path or 'stderr=' in self.path or 'exception=' in self.path:
+        print('[server logging:', self.path, ']')
       else:
         # Use SimpleHTTPServer default file serving operation for GET.
         SimpleHTTPRequestHandler.do_GET(self)
@@ -955,6 +957,7 @@ class BrowserCore(RunnerCore):
     if expectedResult is not None:
       try:
         queue = multiprocessing.Queue()
+        print('port: %s' % self.test_port)
         server = multiprocessing.Process(target=functools.partial(server_func, self.get_dir()), args=(queue, self.test_port))
         server.start()
         # Starting the web page server above is an asynchronous procedure, so before we tell the browser below to navigate to
@@ -975,11 +978,15 @@ class BrowserCore(RunnerCore):
         start = time.time()
         if timeout is None:
           timeout = self.browser_timeout
+        print('timeout: %d' % timeout)
         while time.time() - start < timeout:
           if not queue.empty():
             output = queue.get()
+            print('got: ' + str(output))
             break
           time.sleep(0.1)
+          if time.time() - start > timeout / 2:
+            print('halftime :(')
         if output.startswith('/report_result?skipped:'):
           self.skipTest(unquote(output[len('/report_result?skipped:'):]).strip())
         else:
