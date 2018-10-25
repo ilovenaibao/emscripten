@@ -101,12 +101,13 @@ def no_swiftshader(f):
 # one pass
 def flaky(f):
   max_tries = 5
+
   def decorated(self):
     for i in range(max_tries - 1):
       try:
         f(self)
         return
-      except Exception as e:
+      except Exception:
         print('flaky...')
         continue
     # run the last time normally, to get a simpler stack trace
