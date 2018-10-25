@@ -77,6 +77,7 @@ void one() {
 void main_2(void* arg);
 
 int main() {
+  printf("main\n");
   SDL_Init(SDL_INIT_VIDEO);
   SDL_Window *window;
   SDL_Renderer *renderer;
@@ -93,6 +94,7 @@ int main() {
 }
 
 void main_2(void* arg) {
+  printf("main_2\n");
   emscripten_run_script("window.simulateMouseEvent(10, 20, -1)"); // move from 0,0 to 10,20
   emscripten_run_script("window.simulateMouseEvent(10, 20, 0)"); // click
   emscripten_run_script("window.simulateMouseEvent(10, 20, 0)"); // click some more, but this one should be ignored through PeepEvent
