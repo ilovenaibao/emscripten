@@ -96,6 +96,23 @@ def no_swiftshader(f):
   return decorated
 
 
+# used for tests that fail now and then on CI, due to timing or other
+# random causes. this tries the test a few times, looking for at least
+# one pass
+def flaky(f):
+  max_tries = 5
+  def decorated(self):
+    for i in range(max_tries - 1):
+      try:
+        f(self)
+        return
+      except Exception as e:
+        print('flaky...')
+        continue
+    # run the last time normally, to get a simpler stack trace
+    f(self)
+  return decorated
+
 requires_graphics_hardware = unittest.skipIf(os.getenv('EMTEST_LACKS_GRAPHICS_HARDWARE'), "This test requires graphics hardware")
 requires_sound_hardware = unittest.skipIf(os.getenv('EMTEST_LACKS_SOUND_HARDWARE'), "This test requires sound hardware")
 requires_threads = unittest.skipIf(os.environ.get('EMTEST_LACKS_THREAD_SUPPORT'), "This test requires thread support")
@@ -2768,6 +2785,7 @@ Module['onRuntimeInitialized'] = function() {
     run_process([PYTHON, EMCC, os.path.join(self.get_dir(), 'sdl2_text.c'), '-o', 'page.html', '--pre-js', 'pre.js', '-s', '''EXPORTED_FUNCTIONS=['_main', '_one']''', '-s', 'USE_SDL=2'])
     self.run_browser('page.html', '', '/report_result?1')
 
+  @flaky
   def test_sdl2_mouse(self):
     open(os.path.join(self.get_dir(), 'pre.js'), 'w').write('''
       function simulateMouseEvent(x, y, button) {
