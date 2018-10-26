@@ -259,9 +259,6 @@ workflows:
       - flake8
       - build-docs
       - build
-      - test-browser-firefox:
-          requires:
-            - build
       - test-browser-chrome:
           requires:
             - build
