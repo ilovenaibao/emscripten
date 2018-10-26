@@ -249,7 +249,11 @@ jobs:
             export EMTEST_BROWSER="xvfb-run -a -e /dev/stdout /usr/bin/google-chrome-stable $CHROME_FLAGS_BASE $CHROME_FLAGS_WASM"
             export EMTEST_LACKS_GRAPHICS_HARDWARE=1
             export EMCC_CORES=4
-            ./emscripten/tests/runner.py browser.test_*sdl2*
+            ./emscripten/tests/runner.py browser skip:browser.sdl2_canvas_blank skip:sdl2_canvas_palette_2 skip:sdl2_canvas_palette skip:sdl2_canvas_proxy skip:sdl2_gfx skip:browser.test_sdl2_gl_frames_swap skip:browser.test_sdl2_image skip:browser.test_sdl2_image_prepare skip:browser.test_sdl2_image_prepare_data skip:browser.test_sdl2_mouse skip:browser.test_sdl2_mouse_offsets skip:browser.test_sdl2_ttf
+            # sdl2 skips: SDL2 uses the EGL renderer, which requires a GL context,
+            # and creating one here in CI (swiftshader) fails, which then leads
+            # to intermittent crashes if an event occurs which assumes the
+            # context exists
 
 workflows:
   version: 2

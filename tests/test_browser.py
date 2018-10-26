@@ -100,7 +100,7 @@ def no_swiftshader(f):
 # random causes. this tries the test a few times, looking for at least
 # one pass
 def flaky(f):
-  max_tries = 5
+  max_tries = 3
 
   def decorated(self):
     for i in range(max_tries - 1):
@@ -2787,7 +2787,6 @@ Module['onRuntimeInitialized'] = function() {
     run_process([PYTHON, EMCC, os.path.join(self.get_dir(), 'sdl2_text.c'), '-o', 'page.html', '--pre-js', 'pre.js', '-s', '''EXPORTED_FUNCTIONS=['_main', '_one']''', '-s', 'USE_SDL=2', '-g', '-s', 'ASSERTIONS=2'])
     self.run_browser('page.html', '', '/report_result?1')
 
-  @flaky
   def test_sdl2_mouse(self):
     open(os.path.join(self.get_dir(), 'pre.js'), 'w').write('''
       function simulateMouseEvent(x, y, button) {
@@ -3577,6 +3576,7 @@ window.close = function() {
     self.btest(path_from_root('tests', 'pthread', 'test_pthread_proxying_in_futex_wait.cpp'), expected='0', args=['-O3', '-s', 'USE_PTHREADS=1', '-s', 'PTHREAD_POOL_SIZE=1'])
 
   # Test that sbrk() operates properly in multithreaded conditions
+  @flaky
   @requires_threads
   def test_pthread_sbrk(self):
     for aborting_malloc in [0, 1]:
