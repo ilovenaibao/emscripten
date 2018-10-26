@@ -42,6 +42,7 @@ import sys
 import tempfile
 import time
 import unittest
+import urllib
 import webbrowser
 
 if sys.version_info.major == 2:
@@ -894,7 +895,7 @@ def server_func(dir, q, port):
         self.end_headers()
         self.wfile.write(b'OK')
       elif 'stdout=' in self.path or 'stderr=' in self.path or 'exception=' in self.path:
-        print('[server logging:', self.path, ']')
+        print('[server logging:', urllib.unquote_plus(self.path), ']')
       else:
         # Use SimpleHTTPServer default file serving operation for GET.
         SimpleHTTPRequestHandler.do_GET(self)
