@@ -296,15 +296,18 @@ var LibraryEGL = {
   
   // EGLAPI EGLContext EGLAPIENTRY eglCreateContext(EGLDisplay dpy, EGLConfig config, EGLContext share_context, const EGLint *attrib_list);
   eglCreateContext: function(display, config, hmm, contextAttribs) {
+Module.print('eglCreateContext1');
     if (display != 62000 /* Magic ID for Emscripten 'default display' */) {
       EGL.setErrorCode(0x3008 /* EGL_BAD_DISPLAY */);
       return 0;
     }
+Module.print('eglCreateContext2');
 
     // EGL 1.4 spec says default EGL_CONTEXT_CLIENT_VERSION is GLES1, but this is not supported by Emscripten.
     // So user must pass EGL_CONTEXT_CLIENT_VERSION == 2 to initialize EGL.
     var glesContextVersion = 1;
     for(;;) {
+Module.print('eglCreateContext3');
       var param = {{{ makeGetValue('contextAttribs', '0', 'i32') }}};
       if (param == 0x3098 /*EGL_CONTEXT_CLIENT_VERSION*/) {
         glesContextVersion = {{{ makeGetValue('contextAttribs', '4', 'i32') }}};
@@ -317,13 +320,16 @@ var LibraryEGL = {
       }
       contextAttribs += 8;
     }
+Module.print('eglCreateContext4');
     if (glesContextVersion != 2) {
+Module.print('eglCreateContext5');
 #if GL_ASSERTIONS
       err('When initializing GLES2/WebGL1 via EGL, one must pass EGL_CONTEXT_CLIENT_VERSION = 2 to GL context attributes! GLES version ' + glesContextVersion + ' is not supported!');
 #endif
       EGL.setErrorCode(0x3005 /* EGL_BAD_CONFIG */);
       return 0; /* EGL_NO_CONTEXT */
     }
+Module.print('eglCreateContext6');
 
     // convert configuration to GLUT flags
     var displayMode = 0x0000; /*GLUT_RGB/GLUT_RGBA*/
@@ -336,10 +342,12 @@ var LibraryEGL = {
     _glutInitDisplayMode(displayMode);
     EGL.windowID = _glutCreateWindow();
     if (EGL.windowID != 0) {
+Module.print('eglCreateContext7');
       EGL.setErrorCode(0x3000 /* EGL_SUCCESS */);
       // Note: This function only creates a context, but it shall not make it active.
       return 62004; // Magic ID for Emscripten EGLContext
     } else {
+Module.print('eglCreateContext8');
       EGL.setErrorCode(0x3009 /* EGL_BAD_MATCH */); // By the EGL 1.4 spec, an implementation that does not support GLES2 (WebGL in this case), this error code is set.
       return 0; /* EGL_NO_CONTEXT */
     }
