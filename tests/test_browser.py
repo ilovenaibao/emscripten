@@ -2823,6 +2823,11 @@ Module['onRuntimeInitialized'] = function() {
 
   def test_sdl2_mouse_offsets(self):
     open(os.path.join(self.get_dir(), 'pre.js'), 'w').write('''
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', encodeURI('http://localhost:8888?stdout=pre_js'));
+      xhr.send();
+
       function simulateMouseEvent(x, y, button) {
         var event = document.createEvent("MouseEvents");
         if (button >= 0) {
@@ -2877,6 +2882,10 @@ Module['onRuntimeInitialized'] = function() {
           </div>
           <textarea id="output" rows="8"></textarea>
           <script type="text/javascript">
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', encodeURI('http://localhost:8888?stdout=page_html'));
+      xhr.send();
+
             var Module = {
               canvas: document.getElementById('canvas'),
               print: (function() {
