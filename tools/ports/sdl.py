@@ -5,7 +5,7 @@
 
 import os, shutil, logging
 
-TAG = 'debug' # FIXME XXX
+TAG = 'version_14' # 'debug' # FIXME XXX
 
 def get_with_configure(ports, settings, shared): # not currently used; no real need for configure on emscripten users' machines!
   if settings.USE_SDL == 2:

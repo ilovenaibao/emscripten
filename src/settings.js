@@ -322,7 +322,7 @@ var DEMANGLE_SUPPORT = 0;
 // Runtime.debug at runtime for logging to cease, and can set it when you want
 // it back. A simple way to set it in C++ is
 //   emscripten_run_script("Runtime.debug = ...;");
-var LIBRARY_DEBUG = 0;
+var LIBRARY_DEBUG = 1;
 
 // Print out all syscalls
 var SYSCALL_DEBUG = 0;
