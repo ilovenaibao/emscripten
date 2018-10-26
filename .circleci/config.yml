@@ -134,7 +134,7 @@ jobs:
             export EMTEST_BROWSER="xvfb-run -a -e /dev/stdout /usr/bin/google-chrome-stable $CHROME_FLAGS_BASE $CHROME_FLAGS_WASM"
             export EMTEST_LACKS_GRAPHICS_HARDWARE=1
             export EMCC_CORES=4
-            ./emscripten/tests/runner.py browser.test_*sdl*
+            ./emscripten/tests/runner.py browser.test_*sdl2*
 
 workflows:
   version: 2
