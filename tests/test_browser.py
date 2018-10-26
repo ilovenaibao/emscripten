@@ -2784,7 +2784,7 @@ Module['onRuntimeInitialized'] = function() {
     ''')
     open(os.path.join(self.get_dir(), 'sdl2_text.c'), 'w').write(self.with_report_result(open(path_from_root('tests', 'sdl2_text.c')).read()))
 
-    run_process([PYTHON, EMCC, os.path.join(self.get_dir(), 'sdl2_text.c'), '-o', 'page.html', '--pre-js', 'pre.js', '-s', '''EXPORTED_FUNCTIONS=['_main', '_one']''', '-s', 'USE_SDL=2', '-g'])
+    run_process([PYTHON, EMCC, os.path.join(self.get_dir(), 'sdl2_text.c'), '-o', 'page.html', '--pre-js', 'pre.js', '-s', '''EXPORTED_FUNCTIONS=['_main', '_one']''', '-s', 'USE_SDL=2', '-g', '-s', 'ASSERTIONS=2'])
     self.run_browser('page.html', '', '/report_result?1')
 
   @flaky
@@ -2989,7 +2989,7 @@ window.close = function() {
         document.dispatchEvent(event);
       }
     ''')
-    self.btest('sdl2_pumpevents.c', expected='7', args=['--pre-js', 'pre.js', '-s', 'USE_SDL=2', '-g'])
+    self.btest('sdl2_pumpevents.c', expected='7', args=['--pre-js', 'pre.js', '-s', 'USE_SDL=2', '-g', '-s', 'ASSERTIONS=2'])
 
   def test_sdl2_timer(self):
     self.btest('sdl2_timer.c', expected='5', args=['-s', 'USE_SDL=2'])
